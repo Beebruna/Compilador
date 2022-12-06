@@ -13,8 +13,8 @@ class AnalisadorLexico:
         self.coluna = 1
         
         
-    def classifica_token(self, estado, lexema):
-        if estado == 8 or estado == 10 or estado == 19:
+    def classifica_token(self, estado, lexema, erro):
+        if erro:
             return TOKEN('ERROR', lexema, None)
         
         elif estado == 7:
@@ -59,6 +59,7 @@ class AnalisadorLexico:
     def SCANNER(self):
         estado = 0
         lexema = []
+        erro = False
 
         
         while self.posicao <= len(self.fonte): # <= ? Não existe a posição = len(self.fonte), deveria ser apenas <, não?
@@ -69,20 +70,22 @@ class AnalisadorLexico:
 
             except AlphabetError:
                 if (len(lexema) > 0) and (estado in estados_finais):
-                    return self.classifica_token(estado, lexema)
+                    return self.classifica_token(estado, lexema, erro)
+                erro = 1
                 print(f'ERRO LÉXICO - Caractere inválido na linguagem: {self.fonte[self.posicao]}. Linha {self.linha}, coluna {self.coluna}')
                 lexema.append(self.fonte[self.posicao])
 
             except KeyError:
                 if (len(lexema)) > 0 and (estado in estados_finais.keys()):
-                    return self.classifica_token(estado, lexema)
+                    return self.classifica_token(estado, lexema, erro)
                 elif estado == 19:
+                    erro = True
                     print(f'ERRO LÉXICO - Exponenciação incompleta. Linha {self.linha}, coluna {self.coluna}') 
-                    return self.classifica_token(estado, lexema)
+                    return self.classifica_token(estado, lexema, erro)
                 
             except IndexError:
                 if len(lexema) > 0:
-                    return self.classifica_token(estado, lexema)
+                    return self.classifica_token(estado, lexema, erro)
                 else: 
                     break
 
@@ -92,11 +95,13 @@ class AnalisadorLexico:
                     self.coluna = 0
                     
                     if estado == 8:
+                        erro = True
                         print(f'ERRO LÉXICO - Literal incompleto. Linha {self.linha}, coluna {self.coluna}')
-                        return self.classifica_token(estado, lexema)
+                        return self.classifica_token(estado, lexema, erro)
                     elif estado == 10:
+                        erro = True
                         print(f'ERRO LÉXICO - Comentário incompleto. Linha {self.linha}, coluna {self.coluna}')
-                        return self.classifica_token(estado, lexema)
+                        return self.classifica_token(estado, lexema, erro)
 
                 if (self.fonte[self.posicao] not in delimitadores) or (estado == 8 or estado == 10):
                     lexema.append(self.fonte[self.posicao])
