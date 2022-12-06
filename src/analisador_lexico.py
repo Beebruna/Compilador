@@ -95,13 +95,11 @@ class AnalisadorLexico:
                     self.coluna = 0
                     
                     if estado == 8:
-                        erro = True
                         print(f'ERRO LÉXICO - Literal incompleto. Linha {self.linha}, coluna {self.coluna}')
-                        return self.classifica_token(estado, lexema, erro)
+                        return self.classifica_token(estado, lexema, True)
                     elif estado == 10:
-                        erro = True
                         print(f'ERRO LÉXICO - Comentário incompleto. Linha {self.linha}, coluna {self.coluna}')
-                        return self.classifica_token(estado, lexema, erro)
+                        return self.classifica_token(estado, lexema, True)
 
                 if (self.fonte[self.posicao] not in delimitadores) or (estado == 8 or estado == 10):
                     lexema.append(self.fonte[self.posicao])
