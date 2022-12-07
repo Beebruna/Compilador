@@ -1,5 +1,5 @@
 inicio
-varinicio
+varinicio {ola}
 literal A;
 inteiro B, D, E;
 real C ;
@@ -26,7 +26,7 @@ C<-5.0;
 escreva "\nB=\n"; {\n é o símbolo para salto de linha}
 escreva D;
 escreva "\n";
-escreva C;
+escreva C;!
 escreva "\n";
 escreva A;
 fim
