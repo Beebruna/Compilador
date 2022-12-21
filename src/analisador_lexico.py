@@ -131,12 +131,12 @@ class AnalisadorLexico:
                 self.avanca_posicao()
                 
                 if c == '\n':
-                    self.linha = self.linha + 1
-                    self.coluna = 1
-                    
                     if estado == 8 or estado == 10:
                         self.mensagem_erro(estado)
                         return self.classifica_token(estado, lexema, True)
+                    
+                    self.linha += 1
+                    self.coluna = 1  
                 
                 if (c not in delimitadores) or (estado == 8 or estado == 10):
                     lexema.append(c)
